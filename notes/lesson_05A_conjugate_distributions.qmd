@@ -1,0 +1,51 @@
+---
+title: "Lesson 5A: Conjugate Families"
+subtitle: "The Beta-Binomial Distribution"
+author: "Gabriel Odom, Kazi Tanvir Hasan, and Ning Sun"
+date: "2022-10-05"
+format: html
+---
+
+
+# Introduction
+Let $\textbf{x}$ denote a random sample of size $n$, and let $\mathcal{L}(\boldsymbol\theta|\textbf{x})$ be the likelihood function for $\textbf{x}$ under some probability distribution $f(\cdot|\boldsymbol\theta)$ with parameters in the vector space $\boldsymbol\Theta$.
+
+Recall Bayes' Rule:
+$$
+\pi(\boldsymbol\theta|\textbf{x}) = \frac{
+  \mathcal{L}(\boldsymbol\theta|\textbf{x})\pi(\boldsymbol\theta)
+  }{
+  \int_{\boldsymbol\theta \in \boldsymbol\Theta} \mathcal{L}(\boldsymbol\theta|\textbf{x})\pi(\boldsymbol\theta) d\boldsymbol\theta
+}.
+$$
+
+For the Beta-Binomial conjugacy, in this equation:
+
+- the *prior* distribution, $\pi(\boldsymbol\theta)$, is a Beta distribution with hyper-parameters $\alpha, \beta > 0$,
+- the *likelihood* of the parameter $p$ given the data $\textbf{x}$ has the form of a Binomial distribution, and
+- the *marginal* function is the integral in the denominator, over the support $p \in [0, 1]$.
+
+
+# The Marginal Function
+Integrate the marginal function over the support of $p$ to show that this function of $\textbf{x}, \alpha$, and $\beta$ has the form
+
+$$
+m(\textbf{x}, \alpha, \beta) := \frac{\Gamma(n + 1)}{\Gamma(S_x + 1)\Gamma(n - S_x + 1)} \times \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)} \times \frac{\Gamma(S_x + \alpha)\Gamma(n - S_x + \beta)}{\Gamma(n + \alpha + \beta)}
+$$
+
+
+
+# The Closed-Form Posterior
+Given $m(\textbf{x}, \alpha, \beta)$, the prior, and the likelihood, the closed form of the posterior distribution and its code are below.
+
+
+## The Posterior
+
+
+## Example Code
+
+
+
+# Assignments
+
+Replicate these steps for the Poisson-Gamma Conjugate Posterior Distribution.

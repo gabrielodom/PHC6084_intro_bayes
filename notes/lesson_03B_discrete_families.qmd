@@ -1,0 +1,32 @@
+---
+title: "Lesson 3A: Discrete Likelihoods"
+subtitle: "The Poisson Distribution"
+author: "Gabriel Odom, Kazi Tanvir Hasan, and Ning Sun"
+date: "2022-09-14"
+format: html
+---
+
+
+# Introduction
+
+
+
+# First Moment
+
+
+
+# Second Moment and Variance
+
+
+
+# Moment Generating Function
+
+
+
+# Likelihood and Log-Likelihood Functions
+
+
+
+# Assignments
+
+Replicate these steps for the Discrete Uniform $[a, b]$ Distribution.

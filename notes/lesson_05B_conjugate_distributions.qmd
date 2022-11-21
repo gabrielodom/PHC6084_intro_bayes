@@ -1,0 +1,51 @@
+---
+title: "Lesson 5B: Conjugate Families"
+subtitle: "The Normal-Inverse Gamma Distribution"
+author: "Gabriel Odom, Kazi Tanvir Hasan, and Ning Sun"
+date: "2022-10-12"
+format: html
+---
+
+
+# Introduction
+Let $\textbf{x}$ denote a random sample of size $n$, and let $\mathcal{L}(\boldsymbol\theta|\textbf{x})$ be the likelihood function for $\textbf{x}$ under some probability distribution $f(\cdot|\boldsymbol\theta)$ with parameters in the vector space $\boldsymbol\Theta$.
+
+Recall Bayes' Rule:
+$$
+\pi(\boldsymbol\theta|\textbf{x}) = \frac{
+  \mathcal{L}(\boldsymbol\theta|\textbf{x})\pi(\boldsymbol\theta)
+  }{
+  \int_{\boldsymbol\theta \in \boldsymbol\Theta} \mathcal{L}(\boldsymbol\theta|\textbf{x})\pi(\boldsymbol\theta) d\boldsymbol\theta
+}.
+$$
+
+For the Normal-Inverse Gamma conjugacy, in this equation:
+
+- the *prior* distribution, $\pi(\boldsymbol\theta)$, is an Inverse Gamma distribution with hyper-parameters $\alpha, \beta > 0$,
+- the *likelihood* of the parameter $p$ given the data $\textbf{x}$ has the form of a Normal distribution with fixed mean $\mu$, and
+- the *marginal* function is the integral in the denominator, over the support $\sigma^2 \in (0, \infty)$.
+
+
+# The Marginal Function
+Integrate the marginal function over the support of $p$ to show that this function of $\textbf{x}, \alpha$, and $\beta$ has the form
+
+$$
+m(\textbf{x}, \mu, \alpha, \beta) := 
+$$
+
+
+
+# The Closed-Form Posterior
+Given $m(\textbf{x}, \mu, \alpha, \beta)$, the prior, and the likelihood, the closed form of the posterior distribution and its code are below.
+
+
+## The Posterior
+
+
+## Example Code
+
+
+
+# Assignments
+
+Replicate these steps for the Normal-Normal Conjugate Posterior Distribution.
