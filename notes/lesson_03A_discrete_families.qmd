@@ -39,4 +39,4 @@ format: html
 
 # Assignments
 
-Replicate these steps for the Binomial Distribution.
+Replicate these steps for the Binomial and Negative Binomial Distributions.

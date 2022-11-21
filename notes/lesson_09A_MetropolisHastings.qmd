@@ -1,0 +1,22 @@
+---
+title: "Lesson 9A: The Metropolis-Hastings Algorithm"
+author: "Gabriel Odom, Kazi Tanvir Hasan, and Ning Sun"
+date: "2022-11-09"
+format: html
+---
+
+
+# The Algorithm
+
+
+
+# Analytic Example
+
+
+
+# Code
+
+
+
+# Assignment
+For the example above, change the likelihood from the Normal Distribution to the Log-Normal Distribution and comment on the results.

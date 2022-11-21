@@ -1,0 +1,17 @@
+---
+title: "Lesson 6: Power Priors and Prior Effective Sample Size"
+author: "Gabriel Odom, Kazi Tanvir Hasan, and Ning Sun"
+date: "2022-10-26"
+format: html
+---
+
+
+# Power Priors
+
+
+# Prior Effective Sample Size
+
+
+# Assignment
+For the Beta-Negative Binomial example above, vary the hyperparameters for the Beta Distribution and comment on the results.
+

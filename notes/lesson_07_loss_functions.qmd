@@ -1,0 +1,17 @@
+---
+title: "Lesson 7: Introduction to Loss Functions and Decision Theory"
+author: "Gabriel Odom, Kazi Tanvir Hasan, and Ning Sun"
+date: "2022-11-02"
+format: html
+---
+
+TO TANVIR AND NING: DO NOT EDIT
+
+
+# Introduction
+
+
+
+# Assignment
+For the Beta-Negative Binomial example above, vary the hyperparameters for the Beta Distribution and comment on the results.
+

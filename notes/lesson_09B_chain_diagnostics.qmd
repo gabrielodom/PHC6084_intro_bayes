@@ -1,0 +1,27 @@
+---
+title: "Lesson 9B: MCMC Chain Diagnostics and Interpretation"
+author: "Gabriel Odom, Kazi Tanvir Hasan, and Ning Sun"
+date: "2022-11-16"
+format: html
+---
+
+
+
+# Autocorrelation
+
+
+
+# Burn-in and Thinning
+
+
+
+# Chain Mixing
+
+
+
+# Poster Distribution Samples
+
+
+
+# Assignment
+Replicate the Normal-Normal-Inverse Gamma example above in Stan. Comment on model diagnostics and interpret the results.

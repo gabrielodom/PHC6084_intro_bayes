@@ -1,0 +1,18 @@
+---
+title: "Lesson 8: Markov Chain Monte Carlo"
+author: "Gabriel Odom, Kazi Tanvir Hasan, and Ning Sun"
+date: "2022-11-02"
+format: html
+---
+
+TO NING AND TANVIR: THIS IS A SHORT (1/2) LESSON
+
+# Markov Chains
+
+
+# Monte Carlo Simulations
+
+
+# Assignment
+TO GABRIEL: WRITE AN ASSIGNMENT
+
