@@ -1,8 +1,8 @@
 ---
-title: "Lesson 4A: Continuous Likelihoods"
+title: "Lesson 4A: Continuous Distributions"
 subtitle: "The Beta Distribution"
 author: "Gabriel Odom, Kazi Tanvir Hasan, and Ning Sun"
-date: "2022-09-21"
+date: "2022-09-28"
 format: html
 ---
 
@@ -24,6 +24,16 @@ format: html
 
 
 # Likelihood and Log-Likelihood Functions
+
+
+
+# Maximum Likelihood Estimators
+
+
+## Analytic Solution
+
+
+## Numeric Solution
 
 
 

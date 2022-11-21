@@ -1,7 +1,7 @@
 ---
-title: "Lesson 2: Getting Started with Stan"
+title: "Lesson 1B: Overview of Common Distributions"
 author: "Gabriel Odom, Kazi Tanvir Hasan, and Ning Sun"
-date: "2022-09-07"
+date: "2022-08-31"
 format: html
 ---
 

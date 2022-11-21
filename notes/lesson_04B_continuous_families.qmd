@@ -1,8 +1,8 @@
 ---
-title: "Lesson 4B: Continuous Likelihoods"
+title: "Lesson 4B: Continuous Distributions"
 subtitle: "The Normal Distribution"
 author: "Gabriel Odom, Kazi Tanvir Hasan, and Ning Sun"
-date: "2022-09-28"
+date: "2022-10-05"
 format: html
 ---
 
@@ -24,6 +24,16 @@ format: html
 
 
 # Likelihood and Log-Likelihood Functions
+
+
+
+# Maximum Likelihood Estimators
+
+
+## Analytic Solution
+
+
+## Numeric Solution
 
 
 

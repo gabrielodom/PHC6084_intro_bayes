@@ -1,8 +1,8 @@
 ---
-title: "Lesson 3A: Discrete Likelihoods"
+title: "Lesson 3A: Discrete Distributions"
 subtitle: "The Poisson Distribution"
 author: "Gabriel Odom, Kazi Tanvir Hasan, and Ning Sun"
-date: "2022-09-14"
+date: "2022-09-21"
 format: html
 ---
 
@@ -24,6 +24,16 @@ format: html
 
 
 # Likelihood and Log-Likelihood Functions
+
+
+
+# Maximum Likelihood Estimators
+
+
+## Analytic Solution
+
+
+## Numeric Solution
 
 
 
