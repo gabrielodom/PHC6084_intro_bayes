@@ -20,6 +20,8 @@ E[k] &= \sum_{i}k_if(k)\\
 \therefore E[k] &= p
 \end{align*}
 
+The first moment of the distribution is also it's mean.
+
 # Second Moment and Variance
 
 \begin{align*}
@@ -59,7 +61,7 @@ $\ell(p|\textbf{k}) = \sum_i \left[ k_i \ln(p) + (1 - k_i) \ln(1 - p) \right]$
 
 # Maximum Likelihood Estimators
 
-The Maximum Likelihood Estimate for $p$: 
+The Maximum Likelihood Estimate (MLE) for $p$: 
 
 $\hat{p} = \frac{1}{n} \sum_i k_i$
 
@@ -100,7 +102,8 @@ likelihoods_num <- map_dbl(
 )
 ```
 
-We see that the product of the liklihoods is numerically 0 for large values of $n$. Let's switch to the log-likelihood (**add a section**).
+We see that the product of the likelihoods is numerically 0 for large values of $n$.
+Let's switch to the log-likelihood (**add a section**).
 
 Let's plot it:
 ```{r}
