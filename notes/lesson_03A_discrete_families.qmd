@@ -30,7 +30,7 @@ E[k^2] &= \sum_{i}k_i^2f(k)\\
 \end{align*}
 
 So, \begin{align*}
- Var(k) &= E[k^2]-{E[k]}^2\\
+Var(k) &= E[k^2]-{E[k]}^2\\
 &= p-p^2\\
 \therefore Var(k) &= p(1-p)
 \end{align*}
@@ -77,14 +77,15 @@ $\hat{p} = \frac{1}{n} \sum_i k_i$
 
 Flip a (fair) coin 50 times:
 ```{r}
+#| message: false
+library(tidyverse)
+
 set.seed(20220831)
 sampleBern_lgl <- sample(x = c(TRUE, FALSE), size = 500, replace = TRUE)
 ```
 
 What is the likelihood of $p$?
 ```{r}
-library(tidyverse)
-
 lBern <- function(k, p) { (p^k) * (1 - p)^(1 - k) }
 
 # Range of p's
