@@ -6,35 +6,119 @@ date: "2022-09-14"
 format: html
 ---
 
-
 # Introduction
-
+The Bernoulli Distribution, has PDF $f(k|p) \equiv p^k (1 - p)^{1 - k}$ 
+for $p \in [0, 1]$ and $k = \{0, 1\}$.
 
 
 # First Moment
 
-
+\begin{align*}
+E[k] &= \sum_{i}k_if(k)\\
+&= \sum_{i}k_i p^k_i (1 - p)^{1 - k_i}\\
+&= [0.p^0 (1 - p)^{1 - 0}] +  [1.p^1 (1 - p)^{1 - 1}]\\
+\therefore E[k] &= p
+\end{align*}
 
 # Second Moment and Variance
 
+\begin{align*}
+E[k^2] &= \sum_{i}k_i^2f(k)\\
+&= \sum_{i}k_i p^k_i (1 - p)^{1 - k_i}\\
+&= [0.p^0 (1 - p)^{1 - 0}] +  [1.p^1 (1 - p)^{1 - 1}]\\
+\therefore E[k^2] &= p
+\end{align*}
+
+So, \begin{align*}
+ Var(k) &= E[k^2]-{E[k]}^2\\
+&= p-p^2\\
+\therefore Var(k) &= p(1-p)
+\end{align*}
 
 
 # Moment Generating Function
 
+\begin{align*}
+M_k(t) &= E[e^{tk}]\\
+&= \sum_{i}e^{tk_i}p^k_i (1 - p)^{1 - k_i}\\
+&= [e^{t.0}p^0 (1 - p)^{1 - 0}]+[e^{t.1}p^1 (1 - p)^{1 - 1}]\\
+\therefore M_k(t) &= [1-p] + pe^t 
+\end{align*}
 
 
 # Likelihood and Log-Likelihood Functions
 
+The Likelihood of $p$ is-
+
+$\mathcal{L}(p|\textbf{k}) \equiv \prod_i p^{k_i} (1 - p)^{1 - k_i}$
+
+So, the Log-Likelihood of $p$ is-
+
+$\ell(p|\textbf{k}) = \sum_i \left[ k_i \ln(p) + (1 - k_i) \ln(1 - p) \right]$
 
 
 # Maximum Likelihood Estimators
 
+The Maximum Likelihood Estimate for $p$: 
+
+$\hat{p} = \frac{1}{n} \sum_i k_i$
 
 ## Analytic Solution
 
+\begin{align*}
+\frac{\partial u}{\partial p} &= \frac{1}{p} \sum_i k_i - \frac{1}{1-p} \sum_i (1-k_i) = 0\\
+&\implies \frac{1}{p} \sum_i k_i = \frac{1}{1-p} \sum_i (1-k_i)\\
+&\implies \sum_i k_i - p\sum_i k_i - np + p\sum_i (k_i) = 0\\
+&\implies \sum_i k_i - np = 0\\
+\therefore \hat{p} &= \frac{1}{n} \sum_i k_i = \bar{k}
+\end{align*}
 
 ## Numeric Solution
 
+Flip a (fair) coin 50 times:
+```{r}
+set.seed(20220831)
+sampleBern_lgl <- sample(x = c(TRUE, FALSE), size = 500, replace = TRUE)
+```
+
+What is the likelihood of $p$?
+```{r}
+library(tidyverse)
+
+lBern <- function(k, p) { (p^k) * (1 - p)^(1 - k) }
+
+# Range of p's
+pDomain <- seq(from = 0, to = 1, by = 0.01)
+
+# Likelihood is the product of the PDFs for all values of k
+likelihoods_num <- map_dbl(
+	.x = pDomain,
+	.f = ~{
+		prod( lBern(k = sampleBern_lgl, p = .x) )
+	}
+)
+```
+
+We see that the product of the liklihoods is numerically 0 for large values of $n$. Let's switch to the log-likelihood (**add a section**).
+
+Let's plot it:
+```{r}
+resBern_df <- tibble(X = pDomain, Likelihood = likelihoods_num)
+ggplot(data = resBern_df) +
+	aes(x = X, y = Likelihood) + 
+	geom_point()
+	
+```
+
+What is the maximum likelihood for $p$?
+```{r}
+resBern_df %>% 
+	arrange(desc(Likelihood))
+```
+For this seed, the MLE of $p$ is 0.53 via simulation. However, the closed form solution of this MLE is $\frac{1}{n}\sum_i k_i$ which is
+```{r}
+mean(sampleBern_lgl)
+```
 
 
 # Assignments
