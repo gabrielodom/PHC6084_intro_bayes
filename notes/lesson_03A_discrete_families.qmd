@@ -7,7 +7,7 @@ format: html
 ---
 
 # Introduction
-The Bernoulli Distribution, has PDF $f(k|p) \equiv p^k (1 - p)^{1 - k}$ 
+The Bernoulli Distribution, has a PDF $f(k|p) \equiv p^k (1 - p)^{1 - k}$ 
 for $p \in [0, 1]$ and $k = \{0, 1\}$.
 
 
@@ -21,7 +21,7 @@ E[k] &= \sum_{i}k_if(k)\\
 \end{align*}
 
 The first moment of the distribution is also it's mean.
-hhh
+
 # Second Moment and Variance
 
 \begin{align*}
