@@ -21,7 +21,7 @@ E[k] &= \sum_{i}k_if(k)\\
 \end{align*}
 
 The first moment of the distribution is also it's mean.
-
+hhh
 # Second Moment and Variance
 
 \begin{align*}
