@@ -10,8 +10,53 @@ TO TANVIR AND NING: DO NOT EDIT
 
 # Introduction
 
+Loss functions augment our ability to make decisions. At the most basic level, **loss functions** quantify the penalty we pay if we make a bad **decision**. A basic example is this: we flip a coin with probability of Heads $p$; if we flip a Head, then I pay you 1 dollar; if we flip a Tail, then you pay me 1 dollar. We may or may not have some data, $\textbf{x}$, of previous flips of this coin. There are two **decisions** you can make, denoted $d(\textbf{x})$: 1) play the game, or 2) do not play the game. The loss function for the next flip, $x^*$ would be
+
+$$
+\ell(p|d(\textbf{x})) = \begin{cases}
+  +1, & x^* = H \\
+  -1, & x^* \ne H
+\end{cases} .
+$$
+
+
+
+# Common Loss Functions
+There are a few "standard" loss functions in basic decision theory: absolute error loss, hinge loss, squared (or some higher polynomial) error loss, and 0-1 loss. For the sake of simplicity, assume we are have an estimate $d(\textbf{x}) = a$ for a parameter $\theta \in \mathbb{R}$.
+
+- Absolute Error Loss: $\ell(\theta|a) = |\theta - a|$. Explanation: the penalty for making a bad decision (a bad value for $a$) increases linearly as the estimate for $\theta$ gets worse *in either direction*.
+- Hinge Error Loss: $\ell(\theta|a) = \{\theta - a,\ a \le \theta;\ 0,\ a > \theta$ OR $\ell(\theta|a) = \{a - \theta,\ a \ge \theta;\ 0,\ a < \theta$. Explanation: the penalty for making a bad decision (a bad value for $a$) increases linearly as the estimate for $\theta$ gets worse *in only one direction*.
+- Squared  (Polynomial) Error Loss: $\ell(\theta|a) = (\theta - a)^2$. Explanation: the penalty for making a bad decision (a bad value for $a$) *accelerates* as the estimate for $\theta$ gets worse in either direction. We can replace the power of 2 with any value $k > 1$ and get the same result, but with differing rates of acceleration.
+- 0-1 Loss: $\ell(\theta|a) = \{1,\ a \ne \theta;\ 0,\ a = \theta$. Explanation: if we guess parameter exactly right, there is no penalty; if we make any mistake at all---no matter how small---we lose. A variant of this is to specify an allowable set of values for $a$, $\mathcal{X}$, and we assign a loss of 0 $\forall a \in \mathcal{X}$ and 1 otherwise.
+
+
+
+# Loss in the Bayes Paradigm
+What we see above is the loss for a single decision, based on some (or no) prior data. In most cases, we care less about the loss of a single next step, but rather the average, or **expected**, loss based on all available information about the parameter of interest. All of our information is, by definition, represented in the compact form of the posterior distribution. The posterior distribution for a parameter condenses all our prior information and data collected about the parameter into a single probability function.
+
+Given a posterior distribution $\pi(\theta|\textbf{x})$ and a loss function $\ell(p|d(\textbf{x}))$, the average/expected loss, also known as the **risk**, is given by
+$$
+r(\theta, d(\textbf{x})) \equiv \int \ell(\theta|d(\textbf{x})) \times \pi(\theta|\textbf{x}) d\theta.
+$$
+
+Further note that if the loss function is chosen *a priori* (that is, independent of the observed data), then
+$$
+\begin{align}
+r(\theta, d(\theta))) &\equiv \int \ell(\theta|d(\theta)) \times \pi(\theta|\textbf{x}) d\theta \\
+&= \int \ell(\theta|d(\theta)) \times \frac{\mathcal{L}(\theta|\textbf{x})\pi(\theta)}{\int \mathcal{L}(\theta|\textbf{x})\pi(\theta)d\theta} d\theta \\
+&= \int \frac{\mathcal{L}(\theta|\textbf{x})\pi(\theta)\ell(\theta|d(\theta))}{\int \mathcal{L}(\theta|\textbf{x})\pi(\theta)d\theta} d\theta,
+\end{align}
+$$
+which simply includes the loss function as a *prior constraint* on the parameter $\theta$.
+
+A few key points:
+
+- Under *absolute error loss*, the parameter value for $a$ that minimizes this loss is the posterior *median*.
+- Under *squared error loss*, the parameter value for $a$ that minimizes this loss is the posterior *mean*.
+Under *0-1 loss*, the parameter value for $a$ that minimizes this loss is the posterior *mode*.
 
 
 # Assignment
-For the Beta-Negative Binomial example above, vary the hyperparameters for the Beta Distribution and comment on the results.
+
+- Read and comment your thoughts on [Brown (2000)](https://www.stat.purdue.edu/~dasgupta/528-8.pdf).
 
