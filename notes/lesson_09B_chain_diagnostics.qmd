@@ -22,6 +22,13 @@ format: html
 # Poster Distribution Samples
 
 
+## Quantiles of the Posterior
+
+
+## Posterior Mode
+TO TANVIR AND NING: DO NOT EDIT
+
+
 
 # Assignment
 Replicate the Normal-Normal-Inverse Gamma example above in Stan. Comment on model diagnostics and interpret the results.
