@@ -9,33 +9,101 @@ format: html
 
 # Introduction
 
+The beta distribution on $[0, 1]$ is defined as:
+
+$$ f(x) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \Gamma(\beta)} \times x^{\alpha - 1} (1-x)^{\beta - 1}$$
 
 
 # First Moment
 
+$$
+\begin{align*}
+E(x) 
+&= \int_0^1 x \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \Gamma(\beta)} \times x^{\alpha - 1} (1-x)^{\beta - 1} dx \\
+&= \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \Gamma(\beta)} \int_0^1 x^{\alpha} (1-x)^{\beta - 1} dx \\
+&= \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \Gamma(\beta)}   \frac{\Gamma(\alpha + 1) \Gamma(\beta)}{\Gamma(\alpha + \beta + 1)} 
+\int_0^1 \frac{\Gamma(\alpha + \beta + 1)}{\Gamma(\alpha + 1) \Gamma(\beta)}  x^{(\alpha + 1) - 1} (1-x)^{\beta - 1} dx \\
+&= \frac{\alpha}{\alpha + \beta}.
+\end{align*}
+$$
 
 
 # Second Moment and Variance
 
+$$
+\begin{align*}
+E(x^2) 
+&= \int_0^1 x^2 \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \Gamma(\beta)} \times x^{\alpha - 1} (1-x)^{\beta - 1} dx \\
+&= \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \Gamma(\beta)} \int_0^1 x^{\alpha + 1} (1-x)^{\beta - 1} dx \\
+&= \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \Gamma(\beta)}   \frac{\Gamma(\alpha + 2) \Gamma(\beta)}{\Gamma(\alpha + \beta + 2)} 
+\int_0^1 \frac{\Gamma(\alpha + \beta + 2)}{\Gamma(\alpha + 2) \Gamma(\beta)}  x^{(\alpha + 2) - 1} (1-x)^{\beta - 1} dx \\
+&= \frac{\alpha \times (\alpha + 1)}{(\alpha + \beta) \times (\alpha + \beta +1)}
+\end{align*}
+$$
 
-
+$$ 
+\begin{align*}Var(x) &= E(x^2) - [E(x)]^2 \\
+&= \frac{\alpha \times (\alpha + 1)}{(\alpha + \beta) \times (\alpha + \beta +1)} - \frac{\alpha^2}{(\alpha + \beta)^2} \\
+&= \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta +1)}.
+\end{align*}
+$$
 # Moment Generating Function
 
+The MGF of the Beta distribution is particularly complex and not often of use to statisticians
 
 
 # Likelihood and Log-Likelihood Functions
 
-
+$$\mathcal{L}(\alpha, \beta | X) = \prod_{i = 1}^n \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \Gamma(\beta)} \times x_i^{\alpha - 1} (1-x_i)^{\beta - 1}$$
 
 # Maximum Likelihood Estimators
 
+$$
+\begin{align*}
+\ell(\alpha, \beta | X) &= \sum_{i = 1}^n ln\,[ \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \Gamma(\beta)}  x_i^{\alpha - 1} (1-x_i)^{\beta - 1} \,] \\
+&= n \,[ ln(\Gamma(\alpha + \beta)) - ln(\Gamma(\alpha)) - ln(\Gamma(\beta)) \,] + \sum_{i = 1}^{n} ln\,[ x_i^{\alpha - 1} (1 - x_i)^{\beta - 1} \,] \\
+&= nln\Gamma(\alpha + \beta) - nln\Gamma(\alpha) - nln\Gamma(\beta) + (\alpha - 1) \sum_{i = 1}^{n}ln x_i + (\beta - 1) \sum_{i = 1}^{n} ln(1-x_i)
+\end{align*}
+$$
+There are no closed forms for these likelihoods. If we want to maximise the log-likelihoods, we could make use of the fact that 
+$\psi(x) \equiv \frac{\partial}{\partial x} ln\Gamma(x) \approx - \gamma - \sum_{k = 0}^\infty (\frac{1}{x + k} - \frac{1}{k + 1}) $, where $\gamma$ is Euler's Constant $(\approx 0.5772)$
 
 ## Analytic Solution
 
+Use Newton Raphson? 
 
 ## Numeric Solution
 
+```{r}
+library(tidyverse)
 
+# sample
+set.seed(2022)
+sample_beta <- rbeta(10000, 2, 3)
+
+
+# log-likelihood
+lbeta <- function(X, alpha, beta, n) {
+  n * log(gamma(alpha + beta)) - n * log(gamma(alpha)) - n * log(gamma(beta))	+ (alpha - 1) * sum(log(X)) + (beta - 1) * sum(log(1 - X))
+}
+
+# Range of parameters
+alphaDomain <- rep(seq(from = 0.01, to = 5, by = 0.01), each = 500)
+betaDomain <- rep(seq(from = 0.01, to = 5, by = 0.01), 500)
+
+# likelihood
+likelihood_nums <- lbeta(X = sample_beta , alpha = alphaDomain, beta = betaDomain, n = length(sample_beta))
+
+results <- tibble(alpha = alphaDomain, beta = betaDomain, Likelihood = likelihood_nums) 
+
+
+# what is the maximum likelihood for alpha and beta?
+
+results %>% 
+  arrange(desc(Likelihood)) %>% 
+	head(10)
+```  
+For this seed, the mle of alpha is 1.99 and of beta is 2.99, via simulation. 
 
 # Assignments
 
