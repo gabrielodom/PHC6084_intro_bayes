@@ -9,7 +9,7 @@ format: html
 
 # Introduction
 
-The Bernoulli Distribution, denoted by $\text{Pois}(\lambda)$ has PDF 
+The Poisson Distribution, denoted by $\text{Pois}(\lambda)$ has PDF 
 $f(k|\lambda) \equiv e^{-\lambda}\frac{\lambda^k}{k!}$  for $\lambda \in (0, 1)$
 and $k \in \mathbb{N_0}$.
 
