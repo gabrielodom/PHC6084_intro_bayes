@@ -118,6 +118,7 @@ M_X{t} &= \frac{1}{\sigma\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{\mu + \sigma z}t
 
 # Likelihood and Log-Likelihood Functions
 
+The likeligood function is-
 
 
 # Maximum Likelihood Estimators
