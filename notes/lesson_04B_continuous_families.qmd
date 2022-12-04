@@ -7,10 +7,12 @@ format: html
 ---
 
 
+
 # Introduction
 
 The Normal Distribution, denoted by $\text{N}(\mu, \sigma^2)$ has PDF 
 $f(x|\mu, \sigma^2) \equiv \frac{1}{\sigma \sqrt{2\pi}}e^{-\frac{1}{2\sigma^2}(x-\mu)^2}$  for $\mu \in (-\infty, \infty)$, $\sigma^2 \in (-0, \infty)$ and $x \in \mathbb{R}$.
+
 
 
 # First Moment
@@ -44,6 +46,7 @@ E[X] &= \frac{\mu}{\sqrt 2\pi}2 \int_{0}^{\infty} e^{-\frac{z^2}{2}}dz\\
 &= \frac{\mu}{\sqrt \pi} \sqrt \pi; \quad[\text{Since,} \int_{0}^{\infty} e^{-\frac{x^2}{2}}dx = \sqrt \pi]\\
 \therefore E[X] &= \mu
 \end{align*}
+
 
 
 # Second Moment and Variance
@@ -90,10 +93,12 @@ Then,
 Then, the second moment- 
 $E[X^2]= Var[X] - {E[X]}^2 = \sigma^2 - \mu^2$
 
+
+
 # Moment Generating Function
 
 \begin{align*}
-M_X{t} = E[e^{tx}] &= \int_{-\infty}^{\infty} e^{tx} \frac{1}{\sigma \sqrt{2\pi}}e^{-\frac{1}{2\sigma^2}(x-\mu)^2} dx\\
+M_X{(t)} = E[e^{tx}] &= \int_{-\infty}^{\infty} e^{tx} \frac{1}{\sigma \sqrt{2\pi}}e^{-\frac{1}{2\sigma^2}(x-\mu)^2} dx\\
  &= \frac{1}{\sigma\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{tx} e^{-\frac{1}{2\sigma^2}(x-\mu)^2} dx
 \end{align*}
 
@@ -106,29 +111,117 @@ z &= \frac{x-\mu}{\sigma} \\
 
 Then,
 \begin{align*}
-M_X{t} &= \frac{1}{\sigma\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{\mu + \sigma z}t e^{-\frac{z^2}{2}(x-\mu)^2} \sigma dz\\
+M_X{(t)} &= \frac{1}{\sigma\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{\mu + \sigma z}t e^{-\frac{z^2}{2}(x-\mu)^2} \sigma dz\\
 &=\frac{e^{\mu t}}{\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{\sigma zt} e^{-\frac{z^2}{2}(x-\mu)^2} \sigma dz\\
 &=\frac{e^{\mu t}}{\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{z^2-2\sigma zt} \sigma dz\\
 &=\frac{e^{\mu t}}{\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{\frac{1}{2}{(z-\sigma t)^2- \sigma^2 t^2}} \sigma dz\\
 &=\frac{e^{\mu t}}{\sqrt{2\pi}} e^{\frac{\sigma^2t^2}{2}}\int_{-\infty}^{\infty} e^{\frac{1}{2}{(z-\sigma t)^2}} \sigma dz\\
 &=e^{\mu t} e^{\frac{\sigma^2t^2}{2}}\int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} e^{\frac{1}{2}{(z-\sigma t)^2}} \sigma dz\\
-\therefore M_X{t} &= e^{\mu t} e^{\frac{\sigma^2t^2}{2}}; \quad [\text{Since,} z \sim N(\sigma t, 1)]
+\therefore M_X{(t)} &= e^{\mu t} e^{\frac{\sigma^2t^2}{2}}; \quad [\text{Since,} z \sim N(\sigma t, 1)]
 \end{align*}
 
 
+
 # Likelihood and Log-Likelihood Functions
+
+The likelihood function of $\mu$ and $\sigma^2$ is-
+
+$L(\mu, \sigma^2 | x) = \prod_i f(x|\mu,\sigma^2) = \left(\frac{1}{\sigma \sqrt2\pi} \right)^n e^{-\frac{\sum_i(x_i-\mu)}{2\sigma^2}} $
+
+and, the log-likelihood function is-
+\begin{align*}
+l(\mu, \sigma^2 | x) &= log(L(\mu, \sigma^2 | x))\\
+&= nlog(\frac{1}{\sqrt 2\pi})-\frac{n}{2}log(\sigma^2)-\frac{\sum_i(x_i-\mu)}{2\sigma^2}
+\end{align*}
 
 
 
 # Maximum Likelihood Estimators
 
+The Maximum Likelihood Estimator (MLE) for $\mu = \bar{x}$ and $\sigma^2 = \frac{1}{n}\sum_i(x_i - \mu)^2$.
+
 
 ## Analytic Solution
+
+For $\mu$,
+\begin{align*}
+\frac{\partial f}{\partial \mu} &= 0\\
+\implies 0 - 0 - \frac{1}{2\sigma^2} \sum_i -2(x_i - \mu) &= 0\\
+\implies \frac{1}{\sigma^2} \sum_i -(x_i - \mu) &= 0\\
+\implies \sum_i {x_i} - n\mu &= 0\\
+\therefore \hat{\mu}_{mle} = \frac{1}{n} \sum_i {x_i} = \bar{x}
+\end{align*}
+
+For $\sigma^2$,
+\begin{align*}
+\frac{\partial f}{\partial \sigma^2} &= 0\\
+\implies 0 - \frac{n}{2} \left( \frac{1}{\sigma^2} \right) 2\sigma - \frac{1}{2}\frac{2}{\sigma^3} \sum_i(x_i - \mu)^2 &= 0\\
+\implies \frac{n}{\sigma}- \frac{\sum_i(x_i - \mu)^2}{\sigma^3} &= 0\\
+\implies n\sigma^2 &= \sum_i(x_i - \mu)^2\\
+\therefore \hat{\sigma^2}_{mle} &= \frac{1}{n}\sum_i(x_i - \mu)^2
+\end{align*}
 
 
 ## Numeric Solution
 
+```{r}
+library(tidyverse)
+set.seed(20220919)
+sampleNorm <- rnorm(n = 10000, mean = 5, sd = 2)
+```
 
+What is the log-likelihood of $p$?
+
+```{r}
+lNorm <- function(mu, sigma, k) {
+  (length(k) * log(1/(sqrt(2 * pi)))) 
+  - ((length(k)/2) * log(sigma^2)) 
+  - ((sum(k - mu)^2) / (2 * sigma^2))
+}
+
+# Range of mu's and sigma's
+muDomain <- seq(from = -10000, to = 10000, by = 1) 
+sigmaDomain <- seq(from = 1, to = 21, by = 0.001) 
+
+# log-Likelihood is the log-sum of the PDFs for all values of k
+likelihoods_num <- map2_dbl(
+	.x = muDomain,
+	.y = sigmaDomain,
+	.f = ~{
+		lNorm(mu = .x, sigma = .y, k = sampleNorm)
+	}
+)
+```
+
+Let's plot it:
+
+```{r, warning=FALSE}
+resNorm_df <- tibble(
+  X = muDomain, Y = sigmaDomain, Likelihood = likelihoods_num
+)
+ggplot(data = resNorm_df) +
+	aes(x = X, y = Likelihood) + 
+	geom_point()
+
+ggplot(data = resNorm_df) +
+	aes(x = Y, y = Likelihood) + 
+	geom_point()
+	
+```
+
+What is the maximum likelihood for $\mu$ and $\sigma$?
+
+```{r}
+resNorm_df %>% 
+	arrange(desc(Likelihood))
+```
+
+For this seed, the MLE of $\mu$ is 5 and $\sigma$ is 10.005 via simulation. However, the closed form solution of these MLEs are $\frac{1}{n} \sum_i k_i = \bar{k}$ and $\frac{1}{n} \sum_i (k_i-\mu)^2$ which are
+
+```{r}
+sum(sampleNorm)/length(sampleNorm)
+sum((sampleNorm - mean(sampleNorm))^2)/length(sampleNorm)
+```
 
 # Assignments
 
