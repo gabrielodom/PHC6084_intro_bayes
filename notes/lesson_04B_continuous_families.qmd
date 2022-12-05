@@ -9,13 +9,16 @@ format: html
 
 # Introduction
 
+
 The normal distribution on $(-\infty, \infty)$ is defined as:
 
 $$ f(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} exp[\, - \frac{1}{2 \sigma^2} (x - \mu)^2 ]\,$$
 
+
 # Moment Generating Function
 
-$$X = \mu + \sigma * Z$$, Z follows standard normal distribution.
+
+Normal distributed X can be transformed as $X = \mu + \sigma * Z$, Z follows standard normal distribution.
 $$
 \begin{align*}
 M_z(t) 
@@ -25,6 +28,7 @@ M_z(t)
 &= \frac{1}{\sqrt{2\pi}} \int_S e^{- \frac{1}{2}(z-t)^2} \times e^{\frac{1}{2} t^2} dz .
 \end{align*}
 $$
+
 Let $y = z - t$, then $dy = dz$
 
 $$
@@ -35,6 +39,8 @@ M_z(t)
 &= e^{\frac{1}{2} t^2}
 \end{align*}
 $$
+
+With this fact, we can have the MGF of x easily.
 
 $$
 \begin{align*}
@@ -48,8 +54,8 @@ M_x(t)
 $$
 
 
-
 # First Moment
+
 
 $$
 \begin{align*}
@@ -73,7 +79,9 @@ E(x)
 \end{align*}
 $$
 
+
 # Second Moment and Variance
+
 
 $$
 \begin{align*}
@@ -86,6 +94,8 @@ E(x^2)
 \end{align*}
 $$
 
+Then we can calculate the variance. 
+
 $$
 \begin{align*}
 Var(x) 
@@ -95,7 +105,9 @@ Var(x)
 \end{align*}
 $$
 
+
 # Likelihood and Log-Likelihood Functions
+
 
 $$
 \begin{align*}
@@ -104,7 +116,9 @@ $$
 \end{align*}
 $$
 
+
 # Maximum Likelihood Estimators
+
 
 let $v = \sigma^2$, then
 
@@ -113,20 +127,19 @@ $$\ell(\theta|X) = \frac{n}{2} ln(\frac{1}{2 \pi}) - \frac{n}{2} ln(v) - \frac{1
 Set the partial derivatives equal to 0:
 
 $$
-\frac{\partial \ell}{\partial \mu} 
-= - \frac{1}{v} \sum_1^n (x_i - \mu) = 0
+\frac{\partial \ell}{\partial \mu} = - \frac{1}{v} \sum_1^n (x_i - \mu) = 0
 $$
 $$
-\frac{\partial \ell}{\partial v} 
-= - \frac{n}{2v} + \frac{1}{2v^2} \sum_1^n (x_i - \mu)^2 = 0
+\frac{\partial \ell}{\partial v} = - \frac{n}{2v} + \frac{1}{2v^2} \sum_1^n (x_i - \mu)^2 = 0
 $$
 
 Therefore, we have
 $$\hat{\mu} = \frac{\sum_1^n x_i}{n} = \bar{x}$$
 $$\hat{v} = \frac{\sum_1^n (x_i - \bar{x})^2}{n} $$
+
 ## Analytic Solution
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 library(tidyverse)
 
 # sample
@@ -136,11 +149,10 @@ sample_normal <- rnorm(10000, 0, 1)
 # MLE
 muHat <- mean(sample_normal)
 muHat
-sigma2Hat <- sum((sample_normal - ex)^2)/10000
+sigma2Hat <- sum((sample_normal - muHat)^2)/10000
 sigma2Hat
 ```
 For this seed, the analytical MLE for mu is -0.01 and for variance is 0.99, via the simulation
-
 
 ## Numeric Solution
 
@@ -175,6 +187,8 @@ results %>%
 
 For this seed, the numerical mle of mu is -0.01 and of sigma^2 is 0.99, via simulation. 
 
+
 # Assignments
+
 
 Replicate these steps for the Gamma Distribution, and derive the Inverse Gamma Distribution.

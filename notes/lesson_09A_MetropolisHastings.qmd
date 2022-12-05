@@ -9,14 +9,193 @@ format: html
 # The Algorithm
 
 
+## Basic Idea
+Combine a Markov Chain (an random variable with autocorrelated) with Monte Carlo draws (random number generation). Helpful links:
+
+- <https://www.statlect.com/fundamentals-of-statistics/Metropolis-Hastings-algorithm>
+- <http://gradientdescending.com/metropolis-hastings-algorithm-from-scratch/>
+
+
+## Definition
+We need the following quantities:
+
+- The **Target** (log) likelihood, $\ell(\boldsymbol\theta|\textbf{x})$, and
+- The **Proposal** distribution, $q_y(y|\boldsymbol\theta)$, which we guess based on the form of the data $\textbf{x}$.
+
+The Metropolis-Hastings Algorithm is:
+
+1. Initialise $\boldsymbol\theta^{(0)}$.
+2. **Markov Chain step**: randomly draw $\boldsymbol\theta^{(i + 1)}$ from the proposal distribution $q$ with parameter vector $\boldsymbol\theta^{(i)}$
+3. Calculate the **acceptance** probability for $\boldsymbol\theta^{(i + 1)}$ as
+$$
+a\left(\boldsymbol\theta^{(i + 1)}\right) := \min \left( \frac{\mathcal{L}(\boldsymbol\theta^{(i + 1)}|\textbf{x})}{\mathcal{L}(\boldsymbol\theta^{(i)}|\textbf{x})} \times \frac{q_y(\boldsymbol\theta^{(i)}|\boldsymbol\theta^{(i + 1)})}{q_y(\boldsymbol\theta^{(i + 1)}|\boldsymbol\theta^{(i)})} , 1 \right)
+$$
+4. **Monte Carlo step**: retain sample $\boldsymbol\theta^{(i + 1)}$ iff $a$ is less than a random draw from a Uniform distribution on $[0,1]$; otherwise set $\boldsymbol\theta^{(i)} \longrightarrow \boldsymbol\theta^{(i + 1)}$.
+
 
 # Analytic Example
 
+We will use two pacakges:
+```{r}
+#| message: false
+library(invgamma)
+library(tidyverse)
+```
+
+## The Data
+Age at death to the nearest month:
+```{r}
+ageDeath_num <- c(
+	74.33, 74.00, 78.67, 61.42, 74.92, 65.42, 69.17, 73.83, 64.75, 77.17, 69.67,
+	63.25, 66.00, 71.83, 59.17, 84.33, 72.58, 77.58, 76.25, 63.25, 67.92, 72.25,
+	71.67, 68.00, 70.25, 64.17, 83.75, 68.33, 67.92, 81.17, 61.17, 72.92, 75.50,
+	58.00, 75.42, 65.50, 79.00, 78.92, 67.75, 59.33, 66.42, 70.25, 64.42, 63.75,
+	80.25, 70.67, 75.17, 71.92, 74.92, 70.58, 57.67, 65.33, 80.67, 62.17, 89.25,
+	62.33, 65.67, 74.50, 67.67, 68.33, 60.08, 72.17, 57.58, 78.75, 67.00, 76.17,
+	65.17, 78.08, 74.92, 66.33, 68.92, 59.50, 70.92, 68.75, 69.00, 70.00, 67.83, 
+	75.75, 78.42, 62.83, 70.25, 69.83, 67.33, 69.33, 75.75, 60.67, 72.75, 74.08,
+	63.08, 64.92, 78.92, 63.00, 61.50, 59.00, 64.42, 54.17, 77.00, 72.17, 65.33,
+	66.25
+)
+```
+
+We would like to estimate the mean and standard deviation of this distribution.
+```{r}
+hist(ageDeath_num)
+```
 
 
 # Code
 
+## The Likelihood and Prior
+We can assume a Normal-Normal-InvGamma model. If we set hyperpriors for the mean age at death to be $\mu_0 = 70$ and $\sigma_0 = 15$ (from here: <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3285408/>), and we assume a mildly informative prior for $\sigma$.
+```{r}
+par(mfrow = c(1, 2))
+
+plot(
+	density(
+	  rnorm(10000, mean = 70, sd = 15)
+  ),
+	main = "Prior for mean"
+)
+plot(
+	density(
+	  sqrt(
+	  	invgamma::rinvgamma(10000, shape = 5, scale = 1/1000)
+	  )
+	),
+	main = "Prior for std. dev."
+)
+
+par(mfrow = c(1, 1))
+```
+
+With these hyperpriors, $\ell(\boldsymbol\theta|\textbf{x})$ becomes
+```{r}
+LogNormNormIG <- function(theta_num, X) {
+	
+	ell <- dnorm(X, mean = theta_num["mu"], sd = theta_num["sigma"], log = TRUE)
+	# Non-informative priors
+	prior1 <- dnorm(theta_num["mu"], mean = 70, sd = 15, log = TRUE)
+	prior2 <- invgamma::dinvgamma(
+		theta_num["sigma"]^2, shape = 5, scale = 1/1000, log = TRUE
+	)
+	
+	sum(ell, prior1, prior2)
+	
+}
+```
+
+
+## M-H Algorithm Applied
+
+```{r}
+MHalgorithm <- function(init_num, iter = 100000){
+  # browser()
+	
+	# Hyperpriors
+	alpha <- 5
+	beta <- 1/1000
+	jumpSigma <- c(1, 0.25)
+	
+	# Matrices of Theta & Acceptance values
+	p_int <- length(init_num)
+	chain_mat <- matrix(NA_real_, nrow = iter + 1, ncol = p_int)
+	colnames(chain_mat) <- names(init_num)
+	chain_mat[1, ] <- init_num
+	accept_mat <- matrix(NA, nrow = iter + 1, ncol = p_int)
+	colnames(accept_mat) <- names(init_num)
+	accept_mat[1, ] <- rep(TRUE, p_int)
+	
+	
+	# Walk
+	for (i in seq_len(iter)) {
+		
+		###  Markov Chain Step  ###
+		# I asked why we would use a Normal distribution here, and Oehm said it's
+		#   "fairly common" to use a Normal as the jumping distribution:
+		#   https://twitter.com/danoehm/status/1590442918145581057
+		thetaProp_num <- rnorm(
+		  n = 2, mean = chain_mat[i, c("mu", "sigma")], sd = jumpSigma
+		)
+		names(thetaProp_num) <- c("mu", "sigma")
+		
+		
+		###  Acceptance  ###
+		# Ratio of (Target) Log-Likelihoods
+		thetaLast_num <- chain_mat[i, , drop = TRUE]
+		rL <- LogNormNormIG(theta_num = thetaProp_num, X = ageDeath_num) -
+			LogNormNormIG(theta_num = thetaLast_num, X = ageDeath_num)
+		
+		# Ratio of Log-Proposals; again, we use a normal as a jumping distribution
+		rP <-
+			dnorm(
+	    	x = chain_mat[i, ],
+	    	mean = thetaProp_num["mu"],
+	    	sd = thetaProp_num["sigma"],
+	    	log = TRUE
+	    ) -
+			dnorm(
+	    	x = thetaProp_num,
+	    	mean = chain_mat[i, "mu"],
+	    	sd = chain_mat[i, "sigma"],
+	    	log = TRUE
+	    )
+			
+		# Acceptance
+		A <- c(
+			mu = min(exp(rL + rP[1]), 1),
+			sigma = min(exp(rL + rP[2]), 1)
+		)
+			
+			
+		###  Monte Carlo Step  ###
+		accept_lgl <- runif(2) < A
+		# if we accept, keep the new value; if not, keep the last value
+		chain_mat[i + 1, ] <- 
+			accept_lgl * thetaProp_num + (1 - accept_lgl) * chain_mat[i, ]
+		accept_mat[i, ] <- accept_lgl
+		
+	}
+	
+	# return
+	list(
+		chain = chain_mat,
+		acceptance = accept_mat
+	)
+	
+}
+```
+
+Test
+```{r}
+system.time(
+	res_ls <- MHalgorithm(init_num = c(mu = 50, sigma = 20))
+)
+# about 1 second for 10k iterations
+```
 
 
 # Assignment
+
 For the example above, change the likelihood from the Normal Distribution to the Log-Normal Distribution and comment on the results.

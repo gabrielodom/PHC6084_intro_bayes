@@ -9,12 +9,14 @@ format: html
 
 # Introduction
 
+
 The beta distribution on $[0, 1]$ is defined as:
 
 $$ f(x) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \Gamma(\beta)} \times x^{\alpha - 1} (1-x)^{\beta - 1}$$
 
 
 # First Moment
+
 
 $$
 \begin{align*}
@@ -29,6 +31,7 @@ $$
 
 
 # Second Moment and Variance
+
 
 $$
 \begin{align*}
@@ -47,16 +50,22 @@ $$
 &= \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta +1)}.
 \end{align*}
 $$
+
+
 # Moment Generating Function
+
 
 The MGF of the Beta distribution is particularly complex and not often of use to statisticians
 
 
 # Likelihood and Log-Likelihood Functions
 
+
 $$\mathcal{L}(\alpha, \beta | X) = \prod_{i = 1}^n \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \Gamma(\beta)} \times x_i^{\alpha - 1} (1-x_i)^{\beta - 1}$$
 
+
 # Maximum Likelihood Estimators
+
 
 $$
 \begin{align*}
@@ -65,16 +74,15 @@ $$
 &= nln\Gamma(\alpha + \beta) - nln\Gamma(\alpha) - nln\Gamma(\beta) + (\alpha - 1) \sum_{i = 1}^{n}ln x_i + (\beta - 1) \sum_{i = 1}^{n} ln(1-x_i)
 \end{align*}
 $$
-There are no closed forms for these likelihoods. If we want to maximise the log-likelihoods, we could make use of the fact that 
-$\psi(x) \equiv \frac{\partial}{\partial x} ln\Gamma(x) \approx - \gamma - \sum_{k = 0}^\infty (\frac{1}{x + k} - \frac{1}{k + 1}) $, where $\gamma$ is Euler's Constant $(\approx 0.5772)$
 
 ## Analytic Solution
 
-Use Newton Raphson? 
+There are no closed forms for these likelihoods. If we want to maximise the log-likelihoods, we could make use of the fact that 
+$\psi(x) \equiv \frac{\partial}{\partial x} ln\Gamma(x) \approx - \gamma - \sum_{k = 0}^\infty (\frac{1}{x + k} - \frac{1}{k + 1})$, where $\gamma$ is Euler's Constant $(\approx 0.5772)$
 
 ## Numeric Solution
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 library(tidyverse)
 
 # sample
@@ -105,6 +113,10 @@ results %>%
 ```  
 For this seed, the mle of alpha is 1.99 and of beta is 2.99, via simulation. 
 
+
 # Assignments
 
-Replicate these steps for the Uniform Distribution.
+
+1. Replicate these steps for the Uniform Distribution.
+
+2. Use Newton-Raphson method to get the analytical solution for MLE

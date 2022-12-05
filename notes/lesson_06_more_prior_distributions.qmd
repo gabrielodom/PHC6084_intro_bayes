@@ -8,10 +8,77 @@ format: html
 
 # Power Priors
 
+NOT DONE 
 
 # Prior Effective Sample Size
 
+## Basic Example (Beta-Binomial)
+
+The ideas herein are largely inspired by this paper from Peter Thall: <https://web.ma.utexas.edu/users/pmueller/pap/MTM08.pdf>. Also consider <https://doi.org/10.1111/biom.13124>.
+
+
+### Theoretical Framework
+We know that the conjugate prior for the Binomial distribution is Beta.
+That is, 
+
+$$
+\begin{align*}
+\pi(p|n, k, \alpha, \beta)
+&=
+  \frac{
+    \mathcal{L}(p|n, k) \times \pi(p)
+  }{
+    \int_0^1 \mathcal{L}(p|n, k) \times \pi(p) dp
+  } \\
+&=
+  \frac{
+    {n\choose k} p^{k}(1 - p)^{n - k} \times
+    \frac{ \Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha+\beta) } p^{\alpha - 1} (1 - p)^{\beta - 1}
+  }{
+    {n\choose k} \frac{ \Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha+\beta) } \frac{\Gamma(k + \alpha)\Gamma(n - k + \beta)}{\Gamma(\alpha + \beta + n)}
+  } \\
+&=
+  \frac{\Gamma(\alpha + \beta + n)}{\Gamma(k + \alpha)\Gamma(n - k + \beta)} p^{k + \alpha - 1} (1 - p)^{n - k + \beta - 1}.
+\end{align*}
+$$
+
+This means that the parameters of the prior distribution, $\alpha$ and $\beta$, are effectively adding "samples" to the new distribution.
+
+
+### Visualizing this Effect
+Let's pretend we have 10 samples with 6 successes. We define the Beta-Binomial posterior below:
+```{r}
+n <- 10
+k <- 6
+p <- seq(0.0001, 0.9999, by = 0.001)
+
+posteriorBBinom <- function(p, alpha, beta) {
+	const <- gamma(alpha + beta + n) / (gamma(alpha + k) * gamma(n - k + beta))
+	kern <- p ^ (k + alpha - 1) * (1 - p) ^ (n - k + beta - 1)
+	const * kern
+}
+```
+
+
+#### Beta(2, 2)
+If our prior was a Beta(2, 2), then the posterior distribution of $p$ would look like:
+```{r}
+plot(
+	x = p,
+	y = posteriorBBinom(p, alpha = 2, beta = 2)
+)
+```
+
+Note that the posterior mode (maximum value) is
+```{r}
+bestP_22 <- which.max(posteriorBBinom(p, alpha = 2, beta = 2))
+p[bestP_22]
+```
+
+Why isn't it 0.6? Because of our *prior information*. Our prior information was that $\alpha = \beta = 2$, a symmetric distribution with mean $\alpha / (\alpha + \beta) = 0.5$. This means that the posterior mean is analogous to a weighted average of the prior information and the current data. Using this posterior, the mean is $(k + \alpha) / (k + \alpha + n - k + \beta) = 8 / (8 + 6) = 4/7 \approx 0.57$.
+
 
 # Assignment
-For the Beta-Negative Binomial example above, vary the hyperparameters for the Beta Distribution and comment on the results.
+
+For the Beta-Binomial example above, vary the hyperparameters for the Beta Distribution and comment on the results.
 
