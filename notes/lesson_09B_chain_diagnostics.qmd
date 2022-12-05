@@ -82,7 +82,5 @@ quantile(res2_ls$chain[, "sigma"], c(0.005, 0.025, 0.05, 0.95, 0.975, 0.995))
 TO TANVIR AND NING: DO NOT EDIT
 
 
->>>>>>> c56ca554d00bc4ab018f84386d75fb034a24da7e
-
 # Assignment
 Replicate the Normal-Normal-Inverse Gamma example above in Stan. Comment on model diagnostics and interpret the results.
