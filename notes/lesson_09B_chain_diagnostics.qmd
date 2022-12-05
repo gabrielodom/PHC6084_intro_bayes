@@ -62,6 +62,8 @@ par(mfrow = c(1, 1))
 
 # Poster Distribution Samples
 
+## Quantiles of the Posterior
+
 ```{r}
 par(mfrow = c(1, 2))
 hist(res2_ls$chain[, "mu"], main = "Posterior for mu")
@@ -69,16 +71,12 @@ hist(res2_ls$chain[, "sigma"], main = "Posterior for sigma")
 par(mfrow = c(1, 1))
 ```
 
-<<<<<<< HEAD
 The credible intervals are:
 ```{r}
 # Mu
 quantile(res2_ls$chain[, "mu"], c(0.005, 0.025, 0.05, 0.95, 0.975, 0.995))
 quantile(res2_ls$chain[, "sigma"], c(0.005, 0.025, 0.05, 0.95, 0.975, 0.995))
 ```
-=======
-## Quantiles of the Posterior
-
 
 ## Posterior Mode
 TO TANVIR AND NING: DO NOT EDIT
