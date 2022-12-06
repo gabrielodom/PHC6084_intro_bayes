@@ -5,6 +5,7 @@ date: "2022-09-07"
 format: html
 ---
 
+Instructions can be accessed at <https://mc-stan.org/docs/2_25/cmdstan-guide/cmdstan-installation.html>
 
 # Installing on a PC
 
