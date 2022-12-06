@@ -10,7 +10,7 @@ format: html
 # Introduction
 
 
-The beta distribution on $[0, 1]$ is defined as:
+The beta distribution on $[0, 1]$ with $\alpha \in (-0, \infty)$ and $\beta \in (-0, \infty)$ is defined as:
 
 $$ f(x) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \Gamma(\beta)} \times x^{\alpha - 1} (1-x)^{\beta - 1}$$
 
@@ -43,6 +43,8 @@ E(x^2)
 &= \frac{\alpha \times (\alpha + 1)}{(\alpha + \beta) \times (\alpha + \beta +1)}
 \end{align*}
 $$
+
+We can then calculate the variance:
 
 $$ 
 \begin{align*}Var(x) &= E(x^2) - [E(x)]^2 \\
@@ -80,6 +82,8 @@ $$
 There are no closed forms for these likelihoods. If we want to maximise the log-likelihoods, we could make use of the fact that 
 $\psi(x) \equiv \frac{\partial}{\partial x} ln\Gamma(x) \approx - \gamma - \sum_{k = 0}^\infty (\frac{1}{x + k} - \frac{1}{k + 1})$, where $\gamma$ is Euler's Constant $(\approx 0.5772)$
 
+- note: R functions $\textit{digamma}$ and $\textit{trigamma}$ return the first and second derivatives of the logarithm of the gamma function.
+
 ## Numeric Solution
 
 ```{r, warning=FALSE, message=FALSE}
@@ -88,8 +92,11 @@ library(tidyverse)
 # sample
 set.seed(2022)
 sample_beta <- rbeta(10000, 2, 3)
+```
 
+What is the log-likelihood of $p$?
 
+```{r}
 # log-likelihood
 lbeta <- function(X, alpha, beta, n) {
   n * log(gamma(alpha + beta)) - n * log(gamma(alpha)) - n * log(gamma(beta))	+ (alpha - 1) * sum(log(X)) + (beta - 1) * sum(log(1 - X))
@@ -101,15 +108,16 @@ betaDomain <- rep(seq(from = 0.01, to = 5, by = 0.01), 500)
 
 # likelihood
 likelihood_nums <- lbeta(X = sample_beta , alpha = alphaDomain, beta = betaDomain, n = length(sample_beta))
+```
 
+What is the maximum likelihood for alpha and beta?
+
+```{r}
 results <- tibble(alpha = alphaDomain, beta = betaDomain, Likelihood = likelihood_nums) 
-
-
-# what is the maximum likelihood for alpha and beta?
 
 results %>% 
   arrange(desc(Likelihood)) %>% 
-	head(10)
+	head(5)
 ```  
 For this seed, the mle of alpha is 1.99 and of beta is 2.99, via simulation. 
 
@@ -119,4 +127,4 @@ For this seed, the mle of alpha is 1.99 and of beta is 2.99, via simulation.
 
 1. Replicate these steps for the Uniform Distribution.
 
-2. Use Newton-Raphson method to get the analytical solution for MLE
+2. Use Newton-Raphson method to estimate MLE for Beta distribution
