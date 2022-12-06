@@ -19,10 +19,10 @@ $$
 }.
 $$
 
-For the Beta-Binomial conjugacy, in this equation:
+For the Beta-Binomial conjugation, in this equation:
 
 - the *prior* distribution, $\pi(\boldsymbol\theta)$, is a Beta distribution with hyper-parameters $\alpha, \beta > 0$,
-- the *likelihood* of the parameter $p$ given the data $\textbf{x}$ has the form of a Binomial distribution, and
+- the *likelihood* of the parameter $p$ given the data $\textbf{x}$ has the form of a Binomial distribution, with the number of trials for $x_i$ is denoted by $N_i$, and
 - the *marginal* function is the integral in the denominator, over the support $p \in [0, 1]$.
 
 
@@ -30,7 +30,7 @@ For the Beta-Binomial conjugacy, in this equation:
 Integrate the marginal function over the support of $p$ to show that this function of $\textbf{x}, \alpha$, and $\beta$ has the form
 
 $$
-m(\textbf{x}, \alpha, \beta) := \frac{\Gamma(n + 1)}{\Gamma(S_x + 1)\Gamma(n - S_x + 1)} \times \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)} \times \frac{\Gamma(S_x + \alpha)\Gamma(n - S_x + \beta)}{\Gamma(n + \alpha + \beta)}
+m(\textbf{x}, \alpha, \beta) := [\, \prod_{i = 1}^n {N_i\choose x_i}]\, \times \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)} \times \frac{\Gamma(S_x + \alpha)\Gamma(\sum_1^n(N_i) - S_x + \beta)}{\Gamma(\sum_1^n(N_i) + \alpha + \beta)}
 $$
 
 
@@ -42,9 +42,57 @@ Given $m(\textbf{x}, \alpha, \beta)$, the prior, and the likelihood, the closed 
 ## The Posterior
 
 
+$$
+\begin{align*}
+\pi(p|N, X, \alpha, \beta)
+&=
+  \frac{
+    \mathcal{L}(p|N, X) \times \pi(p)
+  }{
+    \int_0^1 \mathcal{L}(p|N, X) \times \pi(p) dp
+  } \\
+&=
+  \frac{
+    [\, \prod_1^n {N_i\choose x_i} p^{x_i}(1 - p)^{N_i - x_i}]\, \times
+    \frac{ \Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)} p^{\alpha - 1} (1 - p)^{\beta - 1}
+  }{
+    [\, \prod_1^n {N_i\choose x_i}]\, \frac{ \Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)} \frac{\Gamma(S_x + \alpha)\Gamma(\sum_1^n(N_i) - S_x + \beta)}{\Gamma(\alpha + \beta + \sum_1^n(N_i))}
+  } \\
+&=
+  \frac{\Gamma(\alpha + \beta + \sum_1^n(N_i))}{\Gamma(\sum_1^n(x_i) + \alpha)\Gamma(\sum_1^n(N_i) - \sum_1^n(x_i) + \beta)} p^{\sum_1^n(x_i) + \alpha - 1} (1 - p)^{\sum_1^n(N_i) - \sum_1^n(x_i) + \beta - 1}.
+\end{align*}
+$$
+
 ## Example Code
 
+```{r}
+## Generate data
 
+set.seed(2022)
+n <- 100
+true_p <- 0.3
+sample_binom <- rbinom(10000, size = n, prob = true_p)
+N <- rep(n, 10000)
+pDomain <- seq(from = 0, to = 1, by = 0.001)
+
+## Function
+post_betaBinom <- function(pDomain, X, N, alpha, beta){
+  lgamma(alpha + beta + sum(N)) - lgamma(sum(X) + alpha) - lgamma(sum(N) - sum(X) + beta) + 
+   (sum(X) + alpha - 1) * log(pDomain) + (sum(N) - sum(X) + beta - 1) * log(1 - pDomain)
+}
+
+## Result
+BetaBinom_result <- tibble(
+  p = pDomain,
+  likelihood = post_betaBinom(pDomain, sample_binom, N, 5, 5)
+)
+
+
+## Visulization
+
+BetaBinom_result[which.max(BetaBinom_result$likelihood), ]
+plot(x = BetaBinom_result$p, y = BetaBinom_result$likelihood)
+```
 
 # Assignments
 

@@ -22,7 +22,7 @@ $$
 For the Normal-Inverse Gamma conjugacy, in this equation:
 
 - the *prior* distribution, $\pi(\boldsymbol\theta)$, is an Inverse Gamma distribution with hyper-parameters $\alpha, \beta > 0$,
-- the *likelihood* of the parameter $p$ given the data $\textbf{x}$ has the form of a Normal distribution with fixed mean $\mu$, and
+- the *likelihood* of the parameter $\sigma^2$ given the data $\textbf{x}$ has the form of a Normal distribution with fixed mean $\mu$, and
 - the *marginal* function is the integral in the denominator, over the support $\sigma^2 \in (0, \infty)$.
 
 
@@ -30,7 +30,8 @@ For the Normal-Inverse Gamma conjugacy, in this equation:
 Integrate the marginal function over the support of $p$ to show that this function of $\textbf{x}, \alpha$, and $\beta$ has the form
 
 $$
-m(\textbf{x}, \mu, \alpha, \beta) := 
+m(\textbf{x}, \mu, \alpha, \beta) := \frac {\lambda^\alpha} {\Gamma(\alpha)} (2\pi)^{-n/2} \Gamma{(\alpha + \frac {n}{2} )} 
+    (\, \frac{\sum(x_i - \mu)^2}{2} + \lambda )\, ^{- \alpha - \frac {n}{2}}
 $$
 
 
@@ -41,9 +42,59 @@ Given $m(\textbf{x}, \mu, \alpha, \beta)$, the prior, and the likelihood, the cl
 
 ## The Posterior
 
+$$
+\begin{align*}
+\pi(\sigma^2|X, \mu, \alpha, \lambda)
+&=
+  \frac{
+    \mathcal{L}(\sigma^2|X, \mu) \times \pi(\sigma^2)
+  }{
+    \int_{0}^{\infty}  \mathcal{L}(\sigma^2|X, \mu) \times \pi(\sigma^2) d\sigma^2
+  } \\
+&=
+  \frac{
+    [\, \prod_1^n \frac {1} {\sqrt{2\pi \sigma^2}} exp \{ - \frac{1}{2} \frac{(x_i - \mu)^2}{\sigma^2} \} ]\, \times
+    \frac {\lambda^\alpha} {\Gamma(\alpha)} (\sigma^2)^{- \alpha - 1} e^{-\lambda / \sigma^2}
+  }{
+    \frac {\lambda^\alpha} {\Gamma(\alpha)} (2\pi)^{-n/2} \Gamma{(\alpha + \frac {n}{2} )} 
+    (\, \frac{\sum(x_i - \mu)^2}{2} + \lambda )\, ^{- \alpha - \frac {n}{2}}
+  } \\
+&=
+  \frac{(\lambda + \frac{\sum(x_i - \mu)^2}{2})^{\alpha + \frac{n}{2}}} {\Gamma(\alpha + \frac{n}{2})}
+  (\sigma^2)^{- (\alpha + \frac{n}{2}) - 1} exp[\, - \frac{1}{\sigma^2} (\lambda + \frac{\sum(x_i - \mu)^2}{2}) ]\,.
+\end{align*}
+$$
 
 ## Example Code
 
+```{r}
+## Generate data
+
+set.seed(2022)
+n <- 10000
+mu <- 0
+sigma <- 2
+sample_normal <- rnorm(n, mean = mu, sd = sigma)
+
+sigmaDomain <- seq(from = 0, to = 5, by = 0.001)
+
+## Function
+post_NIG <- function(sigmaDomain, X, mu, alpha, lambda, n){
+  (alpha + n/2) * log(lambda + sum((X - mu)^2)/2) - lgamma(alpha + n/2) + (-alpha - n/2 - 1) * log(sigmaDomain) + (- (lambda + sum((X - mu)^2)/2 )/sigmaDomain)
+}
+
+## Result
+NIG_result <- tibble(
+  sigma = sigmaDomain,
+  likelihood = post_NIG(sigmaDomain, sample_normal, mu = 0, alpha = 2, lambda = 3, n = n)
+)
+
+
+## Visulization
+
+NIG_result[which.max(NIG_result$likelihood), ]
+plot(x = NIG_result$sigma, y = NIG_result$likelihood)
+```
 
 
 # Assignments
