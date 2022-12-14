@@ -8,7 +8,15 @@ format: html
 
 # Power Priors
 
-NOT DONE 
+The power prior has emerged as a useful informative prior for the incorporation of historical data in a Bayesian analysis.
+
+Suppose we have historical data from a similar previous study, with sample size $n_0$. Further, let $π_0(\theta)$ denote the prior distribution for $\theta$. Let the data from the current study be denoted as $D$, with sample size $n$. 
+
+Given the parameter $a_0$, we define the power prior distribution of $\theta$ for the current study as $\pi (\theta|D_0, a_0) \propto L(\theta|D_0)^{a_0} \pi_0(\theta)$, where $a_0$ weights the historical data relative to the likelihood of the current study, and thus the parameter a0 controls the influence of the historical data on $L(\theta|D)$. 
+
+Such control is important in cases where there is heterogeneity between the previous and current studies, or when the sample sizes of the two studies are quite different. 
+
+it is unnatural in most applications to weight the historical data more than the current data. Thus, it is scientifically more sound to restrict the range of $a_0$ to be between 0 and 1.
 
 # Prior Effective Sample Size
 

@@ -5,3 +5,30 @@ date: "2022-08-31"
 format: html
 ---
 
+# Discrete Distributions
+
+Bernoulli Distribution
+
+Binomial Distribution
+
+Negative Binomial Distribution
+
+Poisson Distribution
+
+# Continuous Distribution
+
+Normal Distribution 
+
+Gamma Distribution
+
+Beta Distribution
+
+Exponential Distribution
+
+
+# Assignment
+
+Please review the MathStats I and II to refresh your memory about all the distributions above.  
+
+
+

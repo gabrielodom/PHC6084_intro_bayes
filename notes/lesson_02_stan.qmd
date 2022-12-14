@@ -9,6 +9,13 @@ Instructions can be accessed at <https://mc-stan.org/docs/2_25/cmdstan-guide/cmd
 
 # Installing on a PC
 
+- Please follow the instruction above STEP BY STEP
+
+- Installing stan on PC could be harder than on a Mac. It may take you more than one hour. Do it in advance.
+
+- Don't be frustrated, the troubleshooting page would be helpful. We are here to help, too.
+
+- Shell on Windows is "Command prompt". 
 
 
 # Installing on a Mac
