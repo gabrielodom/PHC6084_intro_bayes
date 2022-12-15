@@ -7,12 +7,162 @@ format: html
 
 TO NING AND TANVIR: THIS IS A SHORT (1/2) LESSON
 
-# Markov Chains
 
 
-# Monte Carlo Simulations
+# Basic Idea
+
+Markov Chain Monte Carlo (MCMC) methods are very powerful Monte Carlo methods 
+that are often used in Bayesian inference. While "classical" Monte Carlo methods
+rely on computer-generated samples made up of independent observations, MCMC 
+methods are used to generate sequences of dependent observations. 
+These sequences are Markov chains, which explains the name of the methods.
+
+Helpful links:
+
+- <https://www.statlect.com/fundamentals-of-statistics/Markov-Chain-Monte-Carlo>
+- <https://www.statlect.com/fundamentals-of-statistics/Markov-chains>
+
+
+## Monte Carlo Simulations
+
+- Uses a computer-generated sample from a given probability distribution to 
+estimate a distribution feature.
+
+- Computer-generated sample means using algorithms to produce pseudo-random 
+numbers.
+
+- Produce sequences of independent draws from a uniform distribution on the 
+interval [0, 1].
+
+- When we can’t analyze a random variable’s probability distribution (e.g., its
+expected value), we use the Monte Carlo method to approximate it.
+
+- Computers generate a sample $𝑥_1,𝑥_2,...,𝑥_𝑇$ of independent X draws.
+
+- Calculations use empirical sample distribution.
+
+- The empirical distribution assigns probability $\frac{1}{T}$ to each one of 
+the values $_1,𝑥_2,...,𝑥_𝑇$.
+
+### Plug-in Principle
+
+- The plug-in principle is used in probability theory and statistics to 
+approximate a probability distribution feature (e.g., expected value, variance, 
+quantile).
+
+- In general, the empirical distribution can approximate the true distribution 
+of $X$.
+
+- As the sample size $𝑇$ increases, the approximation converges to the true 
+value.
+
+
+## Markov Chains
+
+### Basics of Markov Chains
+
+- MCMC methods work like standard Monte Carlo methods, but the computer-generated
+draws $𝑋_1,...,𝑋_𝑇$ are serially correlated.
+
+- Markov Chain realizations are $𝑇$ random variables $𝑋_1,...,𝑋_𝑇$ form a 
+Markov Chain.
+
+- Let $𝑋_𝑛$ be a sequence of random vectors. The sequence $𝑋_𝑛$ is said to 
+be a Markov chain if and only if any given term of the sequence $𝑋_𝑛$ is 
+independent of all terms preceding $𝑋_(𝑛−1)$ conditional on $𝑋_(𝑛−1)$:
+\begin{align*}
+𝐹(𝑋_𝑛 |𝑋_{𝑛−1},𝑋_{𝑛−2},...,𝑋_1 )=𝐹(𝑋_𝑛 |𝑋_{𝑛−1} )
+\end{align*}
+where the letter 𝐹 denotes a conditional distribution function (Taboga, 
+Markov chain).
+
+### Markov Property
+
+- A random sequence ${𝑋_𝑡}$ is a Markov chain if and only if, given the current
+value ${𝑋_𝑡}$, the future observations $𝑋_(𝑡+𝑛)$ are conditionally 
+independent of the past values $𝑋_(𝑡−𝑘)$, for any positive integers $k$ and 
+$n$.
+
+$$ P(X_{t+n} = x | X_{t}, X_{t-1}, ... , X_{t-k}) = P(X_{t+n} = x | X_t)  $$
+
+- This Markov property, says that the process is “memoryless”.
+
+- The probability of future chain values depends only on $𝑋_𝑡$, regardless of 
+how the value was reached
+
+### Conditional & Unconditional Distributions 
+
+Thanks to the Markov property, we basically need only two things to analyze a 
+chain:
+
+- the conditional probabilities (or densities) that $X_{t+n}=x_{t+n}$, given that $X_{t}=x_{t}$, denoted by $𝑓(𝑥_{t+1} |𝑥_𝑡 )$
+
+- the unconditional probabilities that $X_{t}=x_{t}$, denoted by $𝑓(𝑥_𝑡 )$
+
+### Asymptotic Independence
+
+Although this is not true in general of any Markov chain, the chains generated 
+by MCMC methods have the following property:
+
+- two variables $X_{t}$ and $X_{t+n}$ are not independent, but they become closer
+and closer to being independent as n increases.
+
+This property implies that $f(X_{t+n}|X_t)$ converges to $f(X_{t+n})$ as $n$ 
+becomes large.
+
+### Target Distribution
+
+- In an MCMC chain, $𝑓(𝑥_𝑡 |𝑥_1 )$ converges to $𝑓(𝑥_𝑡 )$, but, as $𝑡$ 
+changes, the distributions $𝑓(𝑥_𝑡 )$ become almost identical.
+
+- Converge to the stationary distribution of the chain.
+
+- The stationary distribution matches the sample target distribution.
+
+- The larger $𝑡$ , the more $𝑓(𝑥_𝑡 |𝑥_1 )$ and $𝑓(𝑥_𝑡 )$ resemble the 
+target distribution
+
+### A Black-box Approach
+
+- We can imagine an MCMC algorithm as a black box that takes two inputs:
+
+     1. an initial value 𝑥_1; \
+     2. a target distribution.
+
+- The output is a sequence of values $𝑋_1,...,𝑋_𝑇$.
+
+### Burn-in Sample
+
+- Due to the discrepancy between the target distribution and the first terms of 
+the chain, the first MCMC draws are often discarded.
+
+- Burn-in sample is discarded draws.
+
+- By removing the burn-in sample, we keep draws whose distributions are closer 
+to the target.
+
+- This reduces bias in MCMC Monte Carlo approximations.
+
+### Correlation and effective sample size
+
+- The accuracy of a standard Monte Carlo simulation depends on the sample size 
+$T$: the larger $T$ is, the better the approximation.
+
+- In the case of an MCMC simulation, we need to use the concept of effective 
+sample size: $T$ dependent observations are equivalent to a smaller number of 
+independent observations.
+
+For example, 1000 dependent observations could be equivalent to 100 independent observations. In this case, we say that the effective sample size is equal to 100.
+
+- Roughly speaking, the higher the correlation between adjacent observations, 
+the smaller the effective sample size, and the less accurate the MCMC 
+approximation is.
+
+
+Our lecture on "The Metropolis-Hastings Algorithm" discusses all these point in 
+detail.
+
 
 
 # Assignment
 TO GABRIEL: WRITE AN ASSIGNMENT
-
