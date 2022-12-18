@@ -20,6 +20,14 @@ Instructions can be accessed at <https://mc-stan.org/docs/2_25/cmdstan-guide/cmd
 
 # Installing on a Mac
 
+- Follow the instruction above STEP BY STEP
+
+- Installing stan on Mac could be easier than on a PC
+
+- First you need to install 'Xcode' in your Mac. It will take more than an hour. First you need to download 'Xcode' from app store and then open 'Xcode' to install it in your Mac
+
+- Alternative of Shell on Mac is "Terminal"
+
 
 
 # Assignments
